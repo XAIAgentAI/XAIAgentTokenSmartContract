@@ -1,0 +1,2 @@
+# XAIAgentTokenSmartContract
+Token XAIAgent 
