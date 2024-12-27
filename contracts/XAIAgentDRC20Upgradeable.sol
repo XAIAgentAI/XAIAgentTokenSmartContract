@@ -97,6 +97,14 @@ contract XAIAgentDRC20Upgradeable is
     }
 
     /**
+     * @dev Returns the current version of the contract
+     * @return uint256 The version number
+     */
+    function version() external pure returns (uint256) {
+        return 1;
+    }
+
+    /**
      * @dev Enable token locking functionality
      */
     function lockTokensEnable() external onlyOwner {
