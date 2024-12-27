@@ -31,10 +31,9 @@ contract XAIAgentDRC20Upgradeable is
 {
     using SafeMathUpgradeable for uint256;
 
-    // Time constants
-    uint256 public constant PERMANENT_LOCK_DURATION = 1000 * 365 days;
-    
-    // Token locking mechanism
+    // Lock management
+    bool public isLockActive;
+    mapping(address => bool) public lockTransferAdmins;
     mapping(address => LockInfo[]) private walletLockTimestamp;
     
     // Token locking mechanism
@@ -46,6 +45,10 @@ contract XAIAgentDRC20Upgradeable is
 
     // Events
     event TokensLocked(address indexed wallet, uint256 amount, uint256 unlockTime);
+    event LockDisabled(uint256 timestamp, uint256 blockNumber);
+    event LockEnabled(uint256 timestamp, uint256 blockNumber);
+    event AddLockTransferAdmin(address indexed addr);
+    event RemoveLockTransferAdmin(address indexed addr);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -53,18 +56,72 @@ contract XAIAgentDRC20Upgradeable is
     }
 
     function initialize() public initializer {
-        __ERC20_init("XAA Token", "XAA");
+        __ERC20_init("XAIAgent", "XAA");
         __ERC20Burnable_init();
-        __ERC20Permit_init("XAA Token");
+        __ERC20Permit_init("XAIAgent");
         __ReentrancyGuard_init();
         __Ownable_init();
         __UUPSUpgradeable_init();
         
-        _mint(msg.sender, 1000_000_000_000 * 10**decimals()); // 1000 billion tokens
+        _mint(msg.sender, 100_000_000_000 * 10**decimals()); // 100 billion tokens
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
         // Add any additional upgrade authorization logic here if needed
+    }
+
+    /**
+     * @dev Enable token locking functionality
+     */
+    function lockTokensEnable() external onlyOwner {
+        isLockActive = true;
+        emit LockEnabled(block.timestamp, block.number);
+    }
+
+    /**
+     * @dev Disable token locking functionality
+     */
+    function lockTokensDisable() external onlyOwner {
+        isLockActive = false;
+        emit LockDisabled(block.timestamp, block.number);
+    }
+
+    /**
+     * @dev Add a lock transfer admin
+     * @param addr Address to add as lock transfer admin
+     */
+    function addLockTransferAdmin(address addr) external onlyOwner {
+        require(addr != address(0), "Invalid address");
+        lockTransferAdmins[addr] = true;
+        emit AddLockTransferAdmin(addr);
+    }
+
+    /**
+     * @dev Remove a lock transfer admin
+     * @param addr Address to remove as lock transfer admin
+     */
+    function removeLockTransferAdmin(address addr) external onlyOwner {
+        lockTransferAdmins[addr] = false;
+        emit RemoveLockTransferAdmin(addr);
+    }
+
+    /**
+     * @dev Transfer and lock tokens in one transaction
+     * @param to Recipient address
+     * @param value Amount to transfer and lock
+     * @param lockSeconds Duration of the lock in seconds
+     */
+    function transferAndLock(address to, uint256 value, uint256 lockSeconds) external {
+        require(lockTransferAdmins[msg.sender], "Not lock transfer admin");
+        require(to != address(0), "Invalid recipient");
+        require(value > 0, "Invalid amount");
+        require(lockSeconds > 0, "Invalid lock duration");
+        require(walletLockTimestamp[to].length < 100, "Too many lock entries");
+        
+        bool success = transfer(to, value);
+        require(success, "Transfer failed");
+        
+        lockTokens(to, value, lockSeconds);
     }
 
     /**
@@ -151,7 +208,9 @@ contract XAIAgentDRC20Upgradeable is
         if (to == address(0) || amount == 0) {
             return super.transfer(to, amount);
         }
-        require(canTransferAmount(msg.sender, amount), "Transfer amount exceeds unlocked balance");
+        if (isLockActive) {
+            require(canTransferAmount(msg.sender, amount), "Transfer amount exceeds unlocked balance");
+        }
         return super.transfer(to, amount);
     }
 
@@ -165,7 +224,9 @@ contract XAIAgentDRC20Upgradeable is
         if (to == address(0) || amount == 0) {
             return super.transferFrom(from, to, amount);
         }
-        require(canTransferAmount(from, amount), "Transfer amount exceeds unlocked balance");
+        if (isLockActive) {
+            require(canTransferAmount(from, amount), "Transfer amount exceeds unlocked balance");
+        }
         return super.transferFrom(from, to, amount);
     }
 }
