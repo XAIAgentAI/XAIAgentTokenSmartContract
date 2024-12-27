@@ -109,4 +109,114 @@ describe("XAIAgentDRC20", function () {
       expect(await xaaToken.balanceOf(addr2.address)).to.equal(transferAmount);
     });
   });
+
+  describe("Lock Management", function () {
+    it("Should enable and disable lock functionality", async function () {
+      const transferAmount = ethers.utils.parseEther("1000");
+      await xaaToken.connect(owner).transfer(addr1.address, transferAmount);
+      
+      // Lock tokens
+      await xaaToken.testLockTokens(addr1.address, transferAmount, 86400);
+      
+      // Disable lock - transfer should work even with locked tokens
+      await xaaToken.connect(owner).lockTokensDisable();
+      await xaaToken.connect(addr1).transfer(addr2.address, transferAmount);
+      
+      // Enable lock - transfer should fail
+      await xaaToken.connect(owner).lockTokensEnable();
+      await expect(
+        xaaToken.connect(addr1).transfer(addr2.address, transferAmount)
+      ).to.be.revertedWith("Transfer amount exceeds unlocked balance");
+    });
+
+    it("Should manage lock transfer admins correctly", async function () {
+      await xaaToken.connect(owner).addLockTransferAdmin(addr1.address);
+      expect(await xaaToken.lockTransferAdmins(addr1.address)).to.be.true;
+      
+      await xaaToken.connect(owner).removeLockTransferAdmin(addr1.address);
+      expect(await xaaToken.lockTransferAdmins(addr1.address)).to.be.false;
+    });
+
+    it("Should enforce lock entry limits", async function () {
+      const amount = ethers.utils.parseEther("1");
+      await xaaToken.connect(owner).transfer(addr1.address, amount.mul(101));
+      
+      // Add 99 locks
+      for (let i = 0; i < 99; i++) {
+        await xaaToken.testLockTokens(addr1.address, amount, 86400);
+      }
+      
+      // 100th lock should succeed
+      await xaaToken.testLockTokens(addr1.address, amount, 86400);
+      
+      // 101st lock should fail
+      await expect(
+        xaaToken.testLockTokens(addr1.address, amount, 86400)
+      ).to.be.revertedWith("Too many lock entries");
+    });
+  });
+
+  describe("Upgrade Control", function () {
+    it("Should manage upgrade permissions correctly", async function () {
+      const newImplementation = addr2.address; // Mock implementation address
+      
+      // Should fail without permission
+      await expect(
+        xaaToken.connect(owner)._authorizeUpgrade(newImplementation)
+      ).to.be.revertedWith("Only canUpgradeAddress can upgrade");
+      
+      // Set upgrade permission
+      await xaaToken.connect(owner).setUpgradePermission(owner.address);
+      expect(await xaaToken.canUpgradeAddress()).to.equal(owner.address);
+      
+      // Should succeed with permission
+      await xaaToken.connect(owner)._authorizeUpgrade(newImplementation);
+      
+      // Permission should be consumed
+      expect(await xaaToken.canUpgradeAddress()).to.equal(ethers.constants.AddressZero);
+    });
+
+    it("Should disable upgrades permanently", async function () {
+      await xaaToken.connect(owner).disableContractUpgrade();
+      expect(await xaaToken.disableUpgrade()).to.be.true;
+      
+      await expect(
+        xaaToken.connect(owner)._authorizeUpgrade(addr2.address)
+      ).to.be.revertedWith("Contract upgrade is disabled");
+    });
+  });
+
+  describe("Version Control", function () {
+    it("Should return correct version", async function () {
+      expect(await xaaToken.version()).to.equal(1);
+    });
+  });
+
+  describe("Access Control", function () {
+    it("Should enforce owner-only functions", async function () {
+      await expect(
+        xaaToken.connect(addr1).lockTokensEnable()
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+      
+      await expect(
+        xaaToken.connect(addr1).addLockTransferAdmin(addr2.address)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+      
+      await expect(
+        xaaToken.connect(addr1).setUpgradePermission(addr2.address)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+
+    it("Should enforce lock transfer admin functions", async function () {
+      const amount = ethers.utils.parseEther("1000");
+      await xaaToken.connect(owner).transfer(addr1.address, amount);
+      
+      await expect(
+        xaaToken.connect(addr1).transferAndLock(addr2.address, amount, 86400)
+      ).to.be.revertedWith("Not lock transfer admin");
+      
+      await xaaToken.connect(owner).addLockTransferAdmin(addr1.address);
+      await xaaToken.connect(addr1).transferAndLock(addr2.address, amount, 86400);
+    });
+  });
 });
