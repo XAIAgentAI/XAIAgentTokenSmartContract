@@ -48,7 +48,7 @@ contract XAIAgentDRC20Upgradeable is
     }
 
     // Events
-    event TokensLocked(address indexed wallet, uint256 amount, uint256 unlockTime);
+    event TransferAndLock(address indexed from, address indexed to, uint256 value, uint256 blockNumber);
     event LockDisabled(uint256 timestamp, uint256 blockNumber);
     event LockEnabled(uint256 timestamp, uint256 blockNumber);
     event AddLockTransferAdmin(address indexed addr);
@@ -152,6 +152,7 @@ contract XAIAgentDRC20Upgradeable is
         require(value > 0, "Invalid amount");
         require(lockSeconds > 0, "Invalid lock duration");
         require(walletLockTimestamp[to].length < 100, "Too many lock entries");
+        require(isLockActive, "Lock functionality is disabled");
         
         bool success = super.transfer(to, value);
         require(success, "Transfer failed");
@@ -160,12 +161,12 @@ contract XAIAgentDRC20Upgradeable is
     }
 
     /**
-     * @dev Lock tokens for a specified duration
+     * @dev Internal function to lock tokens after transfer
      * @param wallet Address of the wallet to lock tokens for
      * @param amount Amount of tokens to lock
      * @param duration Duration of the lock in seconds
      */
-    function lockTokens(address wallet, uint256 amount, uint256 duration) internal {
+    function lockTokens(address wallet, uint256 amount, uint256 duration) private {
         require(wallet != address(0), "Invalid wallet address");
         require(amount > 0, "Invalid amount");
         require(duration > 0, "Invalid lock duration");
@@ -180,7 +181,7 @@ contract XAIAgentDRC20Upgradeable is
             unlockAt: unlockAt
         }));
         
-        emit TokensLocked(wallet, amount, unlockAt);
+        emit TransferAndLock(msg.sender, wallet, amount, block.number);
     }
 
     /**
@@ -248,11 +249,11 @@ contract XAIAgentDRC20Upgradeable is
      * @param amount Amount to transfer
      */
     function transfer(address to, uint256 amount) public virtual override returns (bool) {
-        require(to != address(0), "Invalid recipient");
-        if (amount == 0) {
-            return true;
+        if (to == address(0) || amount == 0) {
+            return super.transfer(to, amount);
         }
-        if (isLockActive) {
+        
+        if (isLockActive && walletLockTimestamp[msg.sender].length > 0) {
             bool canTransfer = canTransferAmount(msg.sender, amount);
             require(canTransfer, "Insufficient unlocked balance");
         }
@@ -268,11 +269,11 @@ contract XAIAgentDRC20Upgradeable is
      * @param amount Amount to transfer
      */
     function transferFrom(address from, address to, uint256 amount) public virtual override returns (bool) {
-        require(to != address(0), "Invalid recipient");
-        if (amount == 0) {
-            return true;
+        if (to == address(0) || amount == 0) {
+            return super.transferFrom(from, to, amount);
         }
-        if (isLockActive) {
+        
+        if (isLockActive && walletLockTimestamp[from].length > 0) {
             bool canTransfer = canTransferAmount(from, amount);
             require(canTransfer, "Insufficient unlocked balance");
         }
