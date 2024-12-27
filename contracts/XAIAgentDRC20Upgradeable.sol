@@ -31,10 +31,13 @@ contract XAIAgentDRC20Upgradeable is
 {
     using SafeMathUpgradeable for uint256;
 
-    // Time constants
-    uint256 public constant PERMANENT_LOCK_DURATION = 1000 * 365 days;
-    
-    // Token locking mechanism
+    // Upgrade control
+    address public canUpgradeAddress;
+    bool public disableUpgrade;
+
+    // Lock management
+    bool public isLockActive;
+    mapping(address => bool) public walletLockPermission;
     mapping(address => LockInfo[]) private walletLockTimestamp;
     
     // Token locking mechanism
@@ -45,35 +48,128 @@ contract XAIAgentDRC20Upgradeable is
     }
 
     // Events
-    event TokensLocked(address indexed wallet, uint256 amount, uint256 unlockTime);
-
+    event TransferAndLock(address indexed from, address indexed to, uint256 value, uint256 blockNumber);
+    event LockDisabled(uint256 timestamp, uint256 blockNumber);
+    event LockEnabled(uint256 timestamp, uint256 blockNumber);
+    event LockPermissionEnabled(address indexed wallet);
+    event LockPermissionDisabled(address indexed wallet);
+    event AuthorizedUpgradeSelf(address indexed upgradeAddress);
+    event DisableContractUpgrade(uint256 timestamp);
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
 
     function initialize() public initializer {
-        __ERC20_init("XAA Token", "XAA");
+        __ERC20_init("XAIAgent", "XAA");
         __ERC20Burnable_init();
-        __ERC20Permit_init("XAA Token");
+        __ERC20Permit_init("XAIAgent");
         __ReentrancyGuard_init();
         __Ownable_init();
         __UUPSUpgradeable_init();
         
-        _mint(msg.sender, 1000_000_000_000 * 10**decimals()); // 1000 billion tokens
+        _mint(msg.sender, 100_000_000_000 * 10**decimals()); // 100 billion tokens
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
-        // Add any additional upgrade authorization logic here if needed
+    function _authorizeUpgrade(address newImplementation) internal override {
+        require(!disableUpgrade, "Contract upgrade is disabled");
+        require(canUpgradeAddress != address(0), "No upgrade permission set");
+        require(msg.sender == canUpgradeAddress, "Only canUpgradeAddress can upgrade");
+        require(newImplementation != address(0), "Invalid implementation address");
+        canUpgradeAddress = address(0);
     }
 
     /**
-     * @dev Lock tokens for a specified duration
+     * @dev Set the address that can perform the next upgrade
+     * @param _canUpgradeAddress Address that will be authorized to upgrade
+     */
+    function setUpgradePermission(address _canUpgradeAddress) external onlyOwner {
+        canUpgradeAddress = _canUpgradeAddress;
+        emit AuthorizedUpgradeSelf(_canUpgradeAddress);
+    }
+
+    /**
+     * @dev Disable contract upgradeability permanently
+     */
+    function disableContractUpgrade() external onlyOwner {
+        disableUpgrade = true;
+        emit DisableContractUpgrade(block.timestamp);
+    }
+
+    /**
+     * @dev Returns the current version of the contract
+     * @return uint256 The version number
+     */
+    function version() external pure returns (uint256) {
+        return 1;
+    }
+
+    /**
+     * @dev Enable token locking functionality
+     */
+    function lockTokensEnable() external onlyOwner {
+        isLockActive = true;
+        emit LockEnabled(block.timestamp, block.number);
+    }
+
+    /**
+     * @dev Disable token locking functionality
+     */
+    function lockTokensDisable() external onlyOwner {
+        isLockActive = false;
+        emit LockDisabled(block.timestamp, block.number);
+    }
+
+    /**
+     * @dev Enable lock functionality for a specific wallet
+     * @param wallet Address to enable locking for
+     */
+    function enableLockForWallet(address wallet) external onlyOwner {
+        require(wallet != address(0), "Invalid wallet address");
+        walletLockPermission[wallet] = true;
+        emit LockPermissionEnabled(wallet);
+    }
+
+    /**
+     * @dev Disable lock functionality for a specific wallet
+     * @param wallet Address to disable locking for
+     */
+    function disableLockForWallet(address wallet) external onlyOwner {
+        require(wallet != address(0), "Invalid wallet address");
+        walletLockPermission[wallet] = false;
+        emit LockPermissionDisabled(wallet);
+    }
+
+    /**
+     * @dev Transfer and lock tokens in one transaction
+     * @param to Recipient address
+     * @param value Amount to transfer and lock
+     * @param lockSeconds Duration of the lock in seconds
+     */
+    function transferAndLock(address to, uint256 value, uint256 lockSeconds) external {
+        require(walletLockPermission[msg.sender], "Lock not enabled for this wallet");
+        require(to != address(0), "Invalid recipient");
+        require(value > 0, "Invalid amount");
+        require(lockSeconds > 0, "Invalid lock duration");
+        require(isLockActive, "Lock functionality is disabled");
+        
+        bool success = super.transfer(to, value);
+        require(success, "Transfer failed");
+        
+        lockTokens(to, value, lockSeconds);
+    }
+
+    /**
+     * @dev Internal function to lock tokens after transfer
      * @param wallet Address of the wallet to lock tokens for
      * @param amount Amount of tokens to lock
      * @param duration Duration of the lock in seconds
      */
-    function lockTokens(address wallet, uint256 amount, uint256 duration) internal {
+    function lockTokens(address wallet, uint256 amount, uint256 duration) private {
+        require(wallet != address(0), "Invalid wallet address");
+        require(amount > 0, "Invalid amount");
+        require(duration > 0, "Invalid lock duration");
+        
         uint256 lockedAt = block.timestamp;
         uint256 unlockAt = lockedAt + duration;
         
@@ -83,7 +179,7 @@ contract XAIAgentDRC20Upgradeable is
             unlockAt: unlockAt
         }));
         
-        emit TokensLocked(wallet, amount, unlockAt);
+        emit TransferAndLock(msg.sender, wallet, amount, block.number);
     }
 
     /**
@@ -110,7 +206,10 @@ contract XAIAgentDRC20Upgradeable is
      * @param transferAmount Amount to transfer
      * @return Whether the transfer is possible
      */
-    function canTransferAmount(address from, uint256 transferAmount) internal view returns (bool) {
+    function canTransferAmount(address from, uint256 transferAmount) public view returns (bool) {
+        if (!isLockActive) {
+            return true;
+        }
         uint256 lockedAmount = calculateLockedAmount(from);
         uint256 availableAmount = balanceOf(from).sub(lockedAmount);
         return availableAmount >= transferAmount;
@@ -151,8 +250,14 @@ contract XAIAgentDRC20Upgradeable is
         if (to == address(0) || amount == 0) {
             return super.transfer(to, amount);
         }
-        require(canTransferAmount(msg.sender, amount), "Transfer amount exceeds unlocked balance");
-        return super.transfer(to, amount);
+        
+        if (isLockActive && walletLockTimestamp[msg.sender].length > 0) {
+            bool canTransfer = canTransferAmount(msg.sender, amount);
+            require(canTransfer, "Insufficient unlocked balance");
+        }
+        bool success = super.transfer(to, amount);
+        require(success, "Transfer failed");
+        return true;
     }
 
     /**
@@ -165,7 +270,14 @@ contract XAIAgentDRC20Upgradeable is
         if (to == address(0) || amount == 0) {
             return super.transferFrom(from, to, amount);
         }
-        require(canTransferAmount(from, amount), "Transfer amount exceeds unlocked balance");
-        return super.transferFrom(from, to, amount);
+        
+        if (isLockActive && walletLockTimestamp[from].length > 0) {
+            bool canTransfer = canTransferAmount(from, amount);
+            require(canTransfer, "Insufficient unlocked balance");
+        }
+        bool success = super.transferFrom(from, to, amount);
+        require(success, "Transfer failed");
+        return true;
     }
+
 }

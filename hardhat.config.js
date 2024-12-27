@@ -1,6 +1,7 @@
-require("@nomiclabs/hardhat-ethers");
-require("@nomiclabs/hardhat-waffle");
+require("@nomicfoundation/hardhat-ethers");
+require("@nomicfoundation/hardhat-chai-matchers");
 require("@openzeppelin/hardhat-upgrades");
+require("@nomicfoundation/hardhat-verify");
 require("dotenv").config();
 
 /**
@@ -36,5 +37,20 @@ module.exports = {
     tests: "./test",
     cache: "./cache",
     artifacts: "./artifacts"
+  },
+  etherscan: {
+    apiKey: {
+      dbcTestnet: "no-api-key-needed"
+    },
+    customChains: [
+      {
+        network: "dbcTestnet",
+        chainId: 19850818,
+        urls: {
+          apiURL: "https://test.dbcscan.io/api",
+          browserURL: "https://test.dbcscan.io"
+        }
+      }
+    ]
   }
 };

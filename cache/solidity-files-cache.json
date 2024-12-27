@@ -391,8 +391,8 @@
       ]
     },
     "/home/ubuntu/repos/XAIAgentTokenSmartContract/contracts/XAIAgentDRC20Upgradeable.sol": {
-      "lastModificationDate": 1735286774675,
-      "contentHash": "4e3800c35d053cafe3831d3a029cecd9",
+      "lastModificationDate": 1735301749134,
+      "contentHash": "b5a71f621932f06183863c26e820a47b",
       "sourceName": "contracts/XAIAgentDRC20Upgradeable.sol",
       "solcConfig": {
         "version": "0.8.22",
