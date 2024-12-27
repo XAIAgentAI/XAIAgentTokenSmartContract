@@ -37,7 +37,7 @@ contract XAIAgentDRC20Upgradeable is
 
     // Lock management
     bool public isLockActive;
-    mapping(address => bool) public lockTransferAdmins;
+    mapping(address => bool) public walletLockPermission;
     mapping(address => LockInfo[]) private walletLockTimestamp;
     
     // Token locking mechanism
@@ -51,8 +51,8 @@ contract XAIAgentDRC20Upgradeable is
     event TransferAndLock(address indexed from, address indexed to, uint256 value, uint256 blockNumber);
     event LockDisabled(uint256 timestamp, uint256 blockNumber);
     event LockEnabled(uint256 timestamp, uint256 blockNumber);
-    event AddLockTransferAdmin(address indexed addr);
-    event RemoveLockTransferAdmin(address indexed addr);
+    event LockPermissionEnabled(address indexed wallet);
+    event LockPermissionDisabled(address indexed wallet);
     event AuthorizedUpgradeSelf(address indexed upgradeAddress);
     event DisableContractUpgrade(uint256 timestamp);
 
@@ -122,22 +122,23 @@ contract XAIAgentDRC20Upgradeable is
     }
 
     /**
-     * @dev Add a lock transfer admin
-     * @param addr Address to add as lock transfer admin
+     * @dev Enable lock functionality for a specific wallet
+     * @param wallet Address to enable locking for
      */
-    function addLockTransferAdmin(address addr) external onlyOwner {
-        require(addr != address(0), "Invalid address");
-        lockTransferAdmins[addr] = true;
-        emit AddLockTransferAdmin(addr);
+    function enableLockForWallet(address wallet) external onlyOwner {
+        require(wallet != address(0), "Invalid wallet address");
+        walletLockPermission[wallet] = true;
+        emit LockPermissionEnabled(wallet);
     }
 
     /**
-     * @dev Remove a lock transfer admin
-     * @param addr Address to remove as lock transfer admin
+     * @dev Disable lock functionality for a specific wallet
+     * @param wallet Address to disable locking for
      */
-    function removeLockTransferAdmin(address addr) external onlyOwner {
-        lockTransferAdmins[addr] = false;
-        emit RemoveLockTransferAdmin(addr);
+    function disableLockForWallet(address wallet) external onlyOwner {
+        require(wallet != address(0), "Invalid wallet address");
+        walletLockPermission[wallet] = false;
+        emit LockPermissionDisabled(wallet);
     }
 
     /**
@@ -147,11 +148,10 @@ contract XAIAgentDRC20Upgradeable is
      * @param lockSeconds Duration of the lock in seconds
      */
     function transferAndLock(address to, uint256 value, uint256 lockSeconds) external {
-        require(lockTransferAdmins[msg.sender], "Not lock transfer admin");
+        require(walletLockPermission[msg.sender], "Lock not enabled for this wallet");
         require(to != address(0), "Invalid recipient");
         require(value > 0, "Invalid amount");
         require(lockSeconds > 0, "Invalid lock duration");
-        require(walletLockTimestamp[to].length < 100, "Too many lock entries");
         require(isLockActive, "Lock functionality is disabled");
         
         bool success = super.transfer(to, value);
@@ -170,7 +170,6 @@ contract XAIAgentDRC20Upgradeable is
         require(wallet != address(0), "Invalid wallet address");
         require(amount > 0, "Invalid amount");
         require(duration > 0, "Invalid lock duration");
-        require(walletLockTimestamp[wallet].length < 100, "Too many lock entries");
         
         uint256 lockedAt = block.timestamp;
         uint256 unlockAt = lockedAt + duration;
