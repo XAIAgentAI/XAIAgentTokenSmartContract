@@ -1,7 +1,7 @@
 const { expect } = require("chai");
-const { ethers, network } = require("hardhat");
+const { ethers, network, upgrades } = require("hardhat");
 
-describe("XAIAgentDRC20", function () {
+describe("XAIAgentDRC20Upgradeable", function () {
   let xaaToken;
   let owner;
   let addr1;
@@ -11,14 +11,21 @@ describe("XAIAgentDRC20", function () {
     // Get signers
     [owner, addr1, addr2] = await ethers.getSigners();
 
-    // Deploy XAA token
-    const XAAToken = await ethers.getContractFactory("XAIAgentDRC20");
-    xaaToken = await XAAToken.connect(owner).deploy();
+    // Deploy XAA token using upgrades
+    const XAAToken = await ethers.getContractFactory("XAIAgentDRC20Upgradeable");
+    xaaToken = await upgrades.deployProxy(XAAToken, [], {
+      initializer: 'initialize',
+      kind: 'uups'
+    });
     await xaaToken.deployed();
 
     // Verify initial supply
     const totalSupply = await xaaToken.totalSupply();
-    expect(totalSupply).to.equal(ethers.utils.parseEther("1000000000000")); // 1000 billion initial supply
+    expect(totalSupply).to.equal(ethers.utils.parseEther("100000000000")); // 100 billion initial supply
+    
+    // Setup owner as lock transfer admin for all tests
+    await xaaToken.connect(owner).addLockTransferAdmin(owner.address);
+    await xaaToken.connect(owner).lockTokensEnable();
   });
 
   describe("Core Token Functionality", function () {
@@ -46,28 +53,43 @@ describe("XAIAgentDRC20", function () {
       // Lock half of the tokens
       const lockAmount = transferAmount.div(2);
       const duration = 86400; // 1 day
-      await xaaToken.testLockTokens(addr1.address, lockAmount, duration);
+      await xaaToken.connect(owner).transferAndLock(addr1.address, lockAmount, duration);
       
       // Check available balance
       const [total, available] = await xaaToken.getAvailableBalance(addr1.address);
-      expect(total).to.equal(transferAmount);
-      expect(available).to.equal(transferAmount.sub(lockAmount));
+      expect(total).to.equal(transferAmount.add(lockAmount));
+      expect(available).to.equal(transferAmount);
     });
   });
 
   describe("Token Locking", function () {
     it("Should prevent transfer of locked tokens", async function () {
-      // Transfer tokens to test with
       const initialBalance = ethers.utils.parseEther("1000");
-      await xaaToken.connect(owner).transfer(addr1.address, initialBalance);
       
       // Lock all tokens
-      await xaaToken.testLockTokens(addr1.address, initialBalance, 86400); // 1 day lock
+      await xaaToken.connect(owner).addLockTransferAdmin(owner.address);
+      await xaaToken.connect(owner).lockTokensEnable();
+      
+      // Verify lock state
+      expect(await xaaToken.isLockActive()).to.be.true;
+      expect(await xaaToken.lockTransferAdmins(owner.address)).to.be.true;
+      
+      // Transfer and lock tokens in one transaction
+      await xaaToken.connect(owner).transferAndLock(addr1.address, initialBalance, 86400); // 1 day lock
+      
+      // Verify balances and lock state
+      const [total, available] = await xaaToken.getAvailableBalance(addr1.address);
+      expect(total).to.equal(initialBalance);
+      expect(available).to.equal(0);
       
       // Try to transfer locked tokens - should fail
       await expect(
         xaaToken.connect(addr1).transfer(addr2.address, initialBalance)
       ).to.be.revertedWith("Insufficient unlocked balance");
+
+      // Verify balances haven't changed
+      expect(await xaaToken.balanceOf(addr1.address)).to.equal(initialBalance);
+      expect(await xaaToken.balanceOf(addr2.address)).to.equal(0);
       
       // Try to transfer a small amount - should still fail since all tokens are locked
       await expect(
@@ -95,13 +117,14 @@ describe("XAIAgentDRC20", function () {
       // Create two locks
       const lockAmount1 = ethers.utils.parseEther("300");
       const lockAmount2 = ethers.utils.parseEther("400");
-      await xaaToken.testLockTokens(addr1.address, lockAmount1, 86400); // 1 day
-      await xaaToken.testLockTokens(addr1.address, lockAmount2, 172800); // 2 days
+      await xaaToken.connect(owner).addLockTransferAdmin(owner.address);
+      await xaaToken.connect(owner).transferAndLock(addr1.address, lockAmount1, 86400); // 1 day
+      await xaaToken.connect(owner).transferAndLock(addr1.address, lockAmount2, 172800); // 2 days
       
       // Check available balance
       const [total, available] = await xaaToken.getAvailableBalance(addr1.address);
-      expect(total).to.equal(initialBalance);
-      expect(available).to.equal(initialBalance.sub(lockAmount1).sub(lockAmount2));
+      expect(total).to.equal(initialBalance.add(lockAmount1).add(lockAmount2));
+      expect(available).to.equal(initialBalance);
       
       // Should only be able to transfer unlocked amount
       const transferAmount = available;
@@ -116,7 +139,7 @@ describe("XAIAgentDRC20", function () {
       await xaaToken.connect(owner).transfer(addr1.address, transferAmount);
       
       // Lock tokens
-      await xaaToken.testLockTokens(addr1.address, transferAmount, 86400);
+      await xaaToken.connect(owner).transferAndLock(addr1.address, transferAmount, 86400);
       
       // Disable lock - transfer should work even with locked tokens
       await xaaToken.connect(owner).lockTokensDisable();
@@ -126,7 +149,7 @@ describe("XAIAgentDRC20", function () {
       await xaaToken.connect(owner).lockTokensEnable();
       await expect(
         xaaToken.connect(addr1).transfer(addr2.address, transferAmount)
-      ).to.be.revertedWith("Transfer amount exceeds unlocked balance");
+      ).to.be.revertedWith("Insufficient unlocked balance");
     });
 
     it("Should manage lock transfer admins correctly", async function () {
@@ -142,46 +165,52 @@ describe("XAIAgentDRC20", function () {
       await xaaToken.connect(owner).transfer(addr1.address, amount.mul(101));
       
       // Add 99 locks
+      await xaaToken.connect(owner).addLockTransferAdmin(owner.address);
+      
       for (let i = 0; i < 99; i++) {
-        await xaaToken.testLockTokens(addr1.address, amount, 86400);
+        await xaaToken.connect(owner).transferAndLock(addr1.address, amount, 86400);
       }
       
       // 100th lock should succeed
-      await xaaToken.testLockTokens(addr1.address, amount, 86400);
+      await xaaToken.connect(owner).transferAndLock(addr1.address, amount, 86400);
       
       // 101st lock should fail
       await expect(
-        xaaToken.testLockTokens(addr1.address, amount, 86400)
+        xaaToken.connect(owner).transferAndLock(addr1.address, amount, 86400)
       ).to.be.revertedWith("Too many lock entries");
     });
   });
 
   describe("Upgrade Control", function () {
     it("Should manage upgrade permissions correctly", async function () {
-      const newImplementation = addr2.address; // Mock implementation address
+      const XAAToken = await ethers.getContractFactory("XAIAgentDRC20Upgradeable");
+      const newImplementation = await XAAToken.deploy();
       
       // Should fail without permission
       await expect(
-        xaaToken.connect(owner)._authorizeUpgrade(newImplementation)
-      ).to.be.revertedWith("Only canUpgradeAddress can upgrade");
+        xaaToken.connect(owner).upgradeTo(newImplementation.address)
+      ).to.be.revertedWith("No upgrade permission set");
       
       // Set upgrade permission
       await xaaToken.connect(owner).setUpgradePermission(owner.address);
       expect(await xaaToken.canUpgradeAddress()).to.equal(owner.address);
       
       // Should succeed with permission
-      await xaaToken.connect(owner)._authorizeUpgrade(newImplementation);
+      await xaaToken.connect(owner).upgradeTo(newImplementation.address);
       
       // Permission should be consumed
       expect(await xaaToken.canUpgradeAddress()).to.equal(ethers.constants.AddressZero);
     });
 
     it("Should disable upgrades permanently", async function () {
+      const XAAToken = await ethers.getContractFactory("XAIAgentDRC20Upgradeable");
+      const newImplementation = await XAAToken.deploy();
+      
       await xaaToken.connect(owner).disableContractUpgrade();
       expect(await xaaToken.disableUpgrade()).to.be.true;
       
       await expect(
-        xaaToken.connect(owner)._authorizeUpgrade(addr2.address)
+        xaaToken.connect(owner).upgradeTo(newImplementation.address)
       ).to.be.revertedWith("Contract upgrade is disabled");
     });
   });
