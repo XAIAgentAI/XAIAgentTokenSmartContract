@@ -55,7 +55,6 @@ contract XAIAgentDRC20Upgradeable is
     event LockPermissionDisabled(address indexed wallet);
     event AuthorizedUpgradeSelf(address indexed upgradeAddress);
     event DisableContractUpgrade(uint256 timestamp);
-
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -280,4 +279,5 @@ contract XAIAgentDRC20Upgradeable is
         require(success, "Transfer failed");
         return true;
     }
+
 }

@@ -15,21 +15,20 @@ describe("XAIAgentDRC20Upgradeable - TransferAndLock", function () {
         const Token = await ethers.getContractFactory("XAIAgentDRC20Upgradeable");
         token = await upgrades.deployProxy(Token, [], {
             initializer: "initialize",
+            kind: "uups"
         });
-        await token.deployed();
-        
         // Enable lock functionality and set up admin wallet permission
         await token.lockTokensEnable();
         await token.connect(owner).enableLockForWallet(admin.address);
     });
     
     describe("transferAndLock", function () {
-        const amount = ethers.utils.parseEther("1000");
+        const amount = ethers.parseEther("1000");
         const lockDuration = 3600; // 1 hour
         
         beforeEach(async function () {
             // Transfer tokens to admin for testing
-            await token.transfer(admin.address, amount.mul(2));
+            await token.transfer(admin.address, amount * 2n);
         });
         
         it("should transfer and lock tokens correctly", async function () {
@@ -98,16 +97,26 @@ describe("XAIAgentDRC20Upgradeable - TransferAndLock", function () {
             const receipt = await tx.wait();
             
             // Find the TransferAndLock event
-            const event = receipt.events?.find(e => e.event === 'TransferAndLock');
-            expect(event).to.not.be.undefined;
-            expect(event.args.from).to.equal(admin.address);
-            expect(event.args.to).to.equal(user1.address);
-            expect(event.args.value).to.equal(amount);
-            expect(event.args.blockNumber).to.equal(receipt.blockNumber);
+            const transferAndLockEvent = receipt.logs.find(log => {
+                const parsed = token.interface.parseLog({
+                    topics: log.topics,
+                    data: log.data
+                });
+                return parsed.name === 'TransferAndLock';
+            });
+            expect(transferAndLockEvent).to.not.be.undefined;
+            const parsedEvent = token.interface.parseLog({
+                topics: transferAndLockEvent.topics,
+                data: transferAndLockEvent.data
+            });
+            expect(parsedEvent.args.from).to.equal(admin.address);
+            expect(parsedEvent.args.to).to.equal(user1.address);
+            expect(parsedEvent.args.value).to.equal(amount);
+            expect(parsedEvent.args.blockNumber).to.equal(receipt.blockNumber);
         });
         
         it("should handle multiple locks for the same user", async function () {
-            const halfAmount = amount.div(2);
+            const halfAmount = amount / 2n;
             
             // Create two locks
             await token.connect(admin).transferAndLock(user1.address, halfAmount, lockDuration);
