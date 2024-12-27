@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.22;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -151,14 +151,14 @@ contract XAIAgentDRC20 is ERC20, ERC20Burnable, ReentrancyGuard, Ownable {
         
         // Auto-close investment if time is up
         if (block.timestamp >= investmentEndTime) {
-            _endInvestment();
+            endInvestment();
         }
     }
 
     /**
      * @dev End investment period and distribute tokens
      */
-    function _endInvestment() internal {
+    function endInvestment() public {
         require(investmentOpen, "Investment not open");
         require(block.timestamp >= investmentEndTime, "Investment period not ended");
         require(!tokensDistributed, "Tokens already distributed");
@@ -240,17 +240,21 @@ contract XAIAgentDRC20 is ERC20, ERC20Burnable, ReentrancyGuard, Ownable {
         });
         emit PoolCreated(address(this), dbcPool.tokenAmount, totalDBCInvested);
         emit PoolLocked(address(this), permanentTokens);
-                for (uint256 i = 0; i < investors.length; i++) {
-                    address investor = investors[i];
-                    uint256 refundAmount = investments[investor].mul(refundRatio).div(1e18);
-                    if (refundAmount > 0) {
-                        require(dbcToken.transfer(investor, refundAmount), "DBC refund failed");
-                        emit DBCRefunded(investor, refundAmount);
-                    }
+        
+        // Calculate and distribute any refunds if needed
+        if (totalDBCInvested > TARGET_DBC_VALUE) {
+            uint256 refundRatio = totalDBCInvested.sub(TARGET_DBC_VALUE).mul(1e18).div(totalDBCInvested);
+            for (uint256 i = 0; i < investors.length; i++) {
+                address investor = investors[i];
+                uint256 refundAmount = investments[investor].mul(refundRatio).div(1e18);
+                if (refundAmount > 0) {
+                    require(dbcToken.transfer(investor, refundAmount), "DBC refund failed");
+                    emit DBCRefunded(investor, refundAmount);
                 }
             }
-            
-            emit InvestmentEnded(totalDBCInvested);
+        }
+        
+        emit InvestmentEnded(totalDBCInvested);
     }
 
     /**
@@ -365,5 +369,26 @@ contract XAIAgentDRC20 is ERC20, ERC20Burnable, ReentrancyGuard, Ownable {
         }
 
         return super.transferFrom(from, to, amount);
+    }
+
+    /**
+     * @dev Public wrapper for lockTokens - only for testing
+     * @param to Address to lock tokens for
+     * @param amount Amount of tokens to lock
+     * @param duration Duration of the lock in seconds
+     */
+    function testLockTokens(address to, uint256 amount, uint256 duration) public {
+        lockTokens(to, amount, duration);
+    }
+
+    /**
+     * @dev Calculate the USD value of DBC tokens
+     * @param amount Amount of DBC tokens
+     * @return USD value
+     */
+    function getDBCValueInUSD(uint256 amount) internal pure returns (uint256) {
+        // For demonstration, using a fixed rate
+        // In production, this should use an oracle
+        return amount;
     }
 }

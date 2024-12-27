@@ -1,7 +1,7 @@
 {
   "name": "xai-agent-token-contract",
   "version": "1.0.0",
-  "description": "XAIAgent DRC20 token implementation for DeepBrainChain",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "hardhat test",
@@ -13,9 +13,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.0",
+    "@openzeppelin/contracts-upgradeable": "^4.9.6",
+    "@openzeppelin/hardhat-upgrades": "^1.28.0",
     "dotenv": "^16.4.7",
     "ethers": "^5.7.2",
     "express": "^4.21.2",
