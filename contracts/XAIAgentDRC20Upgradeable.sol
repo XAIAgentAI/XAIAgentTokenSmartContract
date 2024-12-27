@@ -31,6 +31,10 @@ contract XAIAgentDRC20Upgradeable is
 {
     using SafeMathUpgradeable for uint256;
 
+    // Upgrade control
+    address public canUpgradeAddress;
+    bool public disableUpgrade;
+
     // Lock management
     bool public isLockActive;
     mapping(address => bool) public lockTransferAdmins;
@@ -49,6 +53,8 @@ contract XAIAgentDRC20Upgradeable is
     event LockEnabled(uint256 timestamp, uint256 blockNumber);
     event AddLockTransferAdmin(address indexed addr);
     event RemoveLockTransferAdmin(address indexed addr);
+    event AuthorizedUpgradeSelf(address indexed upgradeAddress);
+    event DisableContractUpgrade(uint256 timestamp);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -67,7 +73,27 @@ contract XAIAgentDRC20Upgradeable is
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
-        // Add any additional upgrade authorization logic here if needed
+        require(!disableUpgrade, "Contract upgrade is disabled");
+        require(msg.sender == canUpgradeAddress, "Only canUpgradeAddress can upgrade");
+        require(newImplementation != address(0), "Invalid implementation address");
+        canUpgradeAddress = address(0);
+    }
+
+    /**
+     * @dev Set the address that can perform the next upgrade
+     * @param _canUpgradeAddress Address that will be authorized to upgrade
+     */
+    function setUpgradePermission(address _canUpgradeAddress) external onlyOwner {
+        canUpgradeAddress = _canUpgradeAddress;
+        emit AuthorizedUpgradeSelf(_canUpgradeAddress);
+    }
+
+    /**
+     * @dev Disable contract upgradeability permanently
+     */
+    function disableContractUpgrade() external onlyOwner {
+        disableUpgrade = true;
+        emit DisableContractUpgrade(block.timestamp);
     }
 
     /**
