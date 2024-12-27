@@ -165,6 +165,11 @@ contract XAIAgentDRC20Upgradeable is
      * @param duration Duration of the lock in seconds
      */
     function lockTokens(address wallet, uint256 amount, uint256 duration) internal {
+        require(wallet != address(0), "Invalid wallet address");
+        require(amount > 0, "Invalid amount");
+        require(duration > 0, "Invalid lock duration");
+        require(walletLockTimestamp[wallet].length < 100, "Too many lock entries");
+        
         uint256 lockedAt = block.timestamp;
         uint256 unlockAt = lockedAt + duration;
         
