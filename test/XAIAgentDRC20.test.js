@@ -3,131 +3,67 @@ const { ethers, network } = require("hardhat");
 
 describe("XAIAgentDRC20", function () {
   let xaaToken;
-  let dbcToken;
   let owner;
-  let xaaPool;
-  let ecosystem;
-  let creator;
   let addr1;
   let addr2;
 
-  const INITIAL_TOKEN_PRICE = ethers.utils.parseEther("1"); // 1 DBC
-  const TARGET_DBC_VALUE = ethers.utils.parseEther("25000"); // 25k DBC to match contract
-
   beforeEach(async function () {
     // Get signers
-    [owner, xaaPool, ecosystem, creator, addr1, addr2] = await ethers.getSigners();
+    [owner, addr1, addr2] = await ethers.getSigners();
 
-    // Deploy mock DBC token
-    const MockERC20 = await ethers.getContractFactory("MockERC20");
-    dbcToken = await MockERC20.connect(owner).deploy();
-    await dbcToken.deployed();
-
-    // Deploy XAA token with all required parameters
+    // Deploy XAA token
     const XAAToken = await ethers.getContractFactory("XAIAgentDRC20");
-    xaaToken = await XAAToken.connect(owner).deploy(
-      INITIAL_TOKEN_PRICE,
-      dbcToken.address,
-      xaaPool.address,
-      ecosystem.address,
-      creator.address
-    );
+    xaaToken = await XAAToken.connect(owner).deploy();
     await xaaToken.deployed();
 
-    // Get initial tokens from contract for testing
-    const contractBalance = await xaaToken.balanceOf(xaaToken.address);
-    expect(contractBalance).to.equal(ethers.utils.parseEther("1000000000000")); // 1000 billion initial supply
-
-    // Initial setup is complete
-    // Each test will handle its own investment and distribution logic
+    // Verify initial supply
+    const totalSupply = await xaaToken.totalSupply();
+    expect(totalSupply).to.equal(ethers.utils.parseEther("1000000000000")); // 1000 billion initial supply
   });
 
-  describe("Token Distribution", function () {
-    it("Should distribute tokens proportionally when under target", async function () {
-      const investAmount = ethers.utils.parseEther("10000"); // 10k DBC - less than target
-      
-      // Start investment period
-      await xaaToken.connect(owner).startInvestment();
-      
-      // Mint and approve DBC tokens
-      await dbcToken.mint(addr2.address, investAmount);
-      await dbcToken.connect(addr2).approve(xaaToken.address, investAmount);
-      
-      // Invest
-      await xaaToken.connect(addr2).invest(investAmount);
-      
-      // Simulate time passing
-      await network.provider.send("evm_increaseTime", [72 * 3600]); // 72 hours
-      await network.provider.send("evm_mine");
-      
-      // End investment period
-      await xaaToken.connect(owner).endInvestment();
-      
-      // Check balances
-      const addr2Balance = await xaaToken.balanceOf(addr2.address);
-      expect(addr2Balance).to.be.gt(0);
-      
-      // Verify proportional distribution (10k/25k = 40% of allocation)
-      const expectedRatio = investAmount.mul(ethers.BigNumber.from(10000)).div(TARGET_DBC_VALUE);
-      expect(expectedRatio).to.equal(ethers.BigNumber.from(4000)); // 40%
-      
-      // Check that tokens can be transferred after distribution
-      const transferAmount = ethers.utils.parseEther("100");
-      await xaaToken.connect(addr2).transfer(addr1.address, transferAmount);
+  describe("Core Token Functionality", function () {
+    it("Should handle basic transfers", async function () {
+      const transferAmount = ethers.utils.parseEther("1000");
+      await xaaToken.connect(owner).transfer(addr1.address, transferAmount);
       expect(await xaaToken.balanceOf(addr1.address)).to.equal(transferAmount);
     });
 
+    it("Should handle token burning", async function () {
+      const burnAmount = ethers.utils.parseEther("1000");
+      const initialSupply = await xaaToken.totalSupply();
+      
+      await xaaToken.connect(owner).burn(burnAmount);
+      
+      const finalSupply = await xaaToken.totalSupply();
+      expect(finalSupply).to.equal(initialSupply.sub(burnAmount));
+    });
+
     it("Should lock tokens correctly", async function () {
-      // Start investment and distribute tokens
-      await xaaToken.connect(owner).startInvestment();
-      const investAmount = ethers.utils.parseEther("1000");
-      await dbcToken.mint(addr1.address, investAmount);
-      await dbcToken.connect(addr1).approve(xaaToken.address, investAmount);
-      await xaaToken.connect(addr1).invest(investAmount);
+      // Transfer some tokens to test with
+      const transferAmount = ethers.utils.parseEther("1000");
+      await xaaToken.connect(owner).transfer(addr1.address, transferAmount);
       
-      // End investment period
-      await network.provider.send("evm_increaseTime", [72 * 3600]);
-      await network.provider.send("evm_mine");
-      await xaaToken.connect(owner).endInvestment();
-      
-      // Get initial balance
-      const initialBalance = await xaaToken.balanceOf(addr1.address);
-      expect(initialBalance).to.be.gt(0);
-      
-      // Lock tokens
-      const lockAmount = initialBalance.div(2); // Lock half of received tokens
+      // Lock half of the tokens
+      const lockAmount = transferAmount.div(2);
       const duration = 86400; // 1 day
       await xaaToken.testLockTokens(addr1.address, lockAmount, duration);
       
       // Check available balance
       const [total, available] = await xaaToken.getAvailableBalance(addr1.address);
-      expect(total).to.equal(initialBalance);
-      expect(available).to.equal(initialBalance.sub(lockAmount));
+      expect(total).to.equal(transferAmount);
+      expect(available).to.equal(transferAmount.sub(lockAmount));
     });
   });
 
-  describe("Token Transfers", function () {
+  describe("Token Locking", function () {
     it("Should prevent transfer of locked tokens", async function () {
-      // Start investment and distribute tokens
-      await xaaToken.connect(owner).startInvestment();
-      const investAmount = ethers.utils.parseEther("1000");
-      await dbcToken.mint(addr1.address, investAmount);
-      await dbcToken.connect(addr1).approve(xaaToken.address, investAmount);
-      await xaaToken.connect(addr1).invest(investAmount);
-      
-      // End investment period
-      await network.provider.send("evm_increaseTime", [72 * 3600]);
-      await network.provider.send("evm_mine");
-      await xaaToken.connect(owner).endInvestment();
-      
-      // Get initial balance
-      const initialBalance = await xaaToken.balanceOf(addr1.address);
-      expect(initialBalance).to.be.gt(0);
+      // Transfer tokens to test with
+      const initialBalance = ethers.utils.parseEther("1000");
+      await xaaToken.connect(owner).transfer(addr1.address, initialBalance);
       
       // Lock all tokens
       await xaaToken.testLockTokens(addr1.address, initialBalance, 86400); // 1 day lock
       
-      // Try to transfer locked tokens
       // Try to transfer locked tokens - should fail
       await expect(
         xaaToken.connect(addr1).transfer(addr2.address, initialBalance)
@@ -141,12 +77,34 @@ describe("XAIAgentDRC20", function () {
       // Verify balance hasn't changed
       expect(await xaaToken.balanceOf(addr1.address)).to.equal(initialBalance);
       expect(await xaaToken.balanceOf(addr2.address)).to.equal(0);
+      
       // Wait for lock duration to pass
       await network.provider.send("evm_increaseTime", [86401]); // 1 day + 1 second
       await network.provider.send("evm_mine");
       
       // Now should allow transfer since lock period is over
       const transferAmount = ethers.utils.parseEther("100");
+      await xaaToken.connect(addr1).transfer(addr2.address, transferAmount);
+      expect(await xaaToken.balanceOf(addr2.address)).to.equal(transferAmount);
+    });
+
+    it("Should handle multiple token locks", async function () {
+      const initialBalance = ethers.utils.parseEther("1000");
+      await xaaToken.connect(owner).transfer(addr1.address, initialBalance);
+      
+      // Create two locks
+      const lockAmount1 = ethers.utils.parseEther("300");
+      const lockAmount2 = ethers.utils.parseEther("400");
+      await xaaToken.testLockTokens(addr1.address, lockAmount1, 86400); // 1 day
+      await xaaToken.testLockTokens(addr1.address, lockAmount2, 172800); // 2 days
+      
+      // Check available balance
+      const [total, available] = await xaaToken.getAvailableBalance(addr1.address);
+      expect(total).to.equal(initialBalance);
+      expect(available).to.equal(initialBalance.sub(lockAmount1).sub(lockAmount2));
+      
+      // Should only be able to transfer unlocked amount
+      const transferAmount = available;
       await xaaToken.connect(addr1).transfer(addr2.address, transferAmount);
       expect(await xaaToken.balanceOf(addr2.address)).to.equal(transferAmount);
     });

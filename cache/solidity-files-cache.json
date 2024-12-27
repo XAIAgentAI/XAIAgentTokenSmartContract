@@ -1,10 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/contracts/MockDBC.sol": {
-      "lastModificationDate": 1735283186948,
-      "contentHash": "7d2de9e312a7c9918de9d487d58601d6",
-      "sourceName": "contracts/MockDBC.sol",
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/contracts/XAIAgentDRC20.sol": {
+      "lastModificationDate": 1735286702111,
+      "contentHash": "50d360f4f23d2340ee4b32f23a7a06b9",
+      "sourceName": "contracts/XAIAgentDRC20.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
@@ -31,13 +31,93 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
+        "@openzeppelin/contracts/security/ReentrancyGuard.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/utils/math/SafeMath.sol"
       ],
       "versionPragmas": [
-        "^0.8.18"
+        "^0.8.22"
       ],
       "artifacts": [
-        "MockDBC"
+        "XAIAgentDRC20"
+      ]
+    },
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+      "lastModificationDate": 1735284863256,
+      "contentHash": "5a20b2cad87ddb61c7a3a6af21289e28",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol": {
+      "lastModificationDate": 1735284863280,
+      "contentHash": "1535f8c0c68463f8c1b5239f7584e71f",
+      "sourceName": "@openzeppelin/contracts/security/ReentrancyGuard.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ReentrancyGuard"
       ]
     },
     "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol": {
@@ -81,10 +161,10 @@
         "ERC20"
       ]
     },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
-      "lastModificationDate": 1735284863080,
-      "contentHash": "df36f7051335cd1e748b1b6463b7fdd3",
-      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol": {
+      "lastModificationDate": 1735284863312,
+      "contentHash": "f6f4fda16c536e57069af40a245c985e",
+      "sourceName": "@openzeppelin/contracts/utils/math/SafeMath.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
@@ -115,83 +195,7 @@
         "^0.8.0"
       ],
       "artifacts": [
-        "IERC20"
-      ]
-    },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/utils/Context.sol": {
-      "lastModificationDate": 1735284862432,
-      "contentHash": "f07feb4a44b1a4872370da5aa70e8e46",
-      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Context"
-      ]
-    },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
-      "lastModificationDate": 1735284863084,
-      "contentHash": "909ab67fc5c25033fe6cd364f8c056f9",
-      "sourceName": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../IERC20.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC20Metadata"
+        "SafeMath"
       ]
     },
     "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol": {
@@ -234,10 +238,84 @@
         "ERC20Burnable"
       ]
     },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
-      "lastModificationDate": 1735284863256,
-      "contentHash": "5a20b2cad87ddb61c7a3a6af21289e28",
-      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1735284862432,
+      "contentHash": "f07feb4a44b1a4872370da5aa70e8e46",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1735284863080,
+      "contentHash": "df36f7051335cd1e748b1b6463b7fdd3",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+      "lastModificationDate": 1735284863084,
+      "contentHash": "909ab67fc5c25033fe6cd364f8c056f9",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
@@ -264,19 +342,19 @@
         }
       },
       "imports": [
-        "../utils/Context.sol"
+        "../IERC20.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "Ownable"
+        "IERC20Metadata"
       ]
     },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/contracts/XAIAgentDRC20.sol": {
-      "lastModificationDate": 1735285277472,
-      "contentHash": "8cbd956459e4a8e004635b2daccdf91a",
-      "sourceName": "contracts/XAIAgentDRC20.sol",
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/contracts/mocks/MockERC20.sol": {
+      "lastModificationDate": 1735286751055,
+      "contentHash": "3bdf98e31898d04e715a2f6c5fe9f88a",
+      "sourceName": "contracts/mocks/MockERC20.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
@@ -303,97 +381,18 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
-        "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        "@openzeppelin/contracts/security/ReentrancyGuard.sol",
-        "@openzeppelin/contracts/access/Ownable.sol",
-        "@openzeppelin/contracts/utils/math/SafeMath.sol"
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
       ],
       "versionPragmas": [
         "^0.8.22"
       ],
       "artifacts": [
-        "XAIAgentDRC20"
-      ]
-    },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol": {
-      "lastModificationDate": 1735284863280,
-      "contentHash": "1535f8c0c68463f8c1b5239f7584e71f",
-      "sourceName": "@openzeppelin/contracts/security/ReentrancyGuard.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ReentrancyGuard"
-      ]
-    },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol": {
-      "lastModificationDate": 1735284863312,
-      "contentHash": "f6f4fda16c536e57069af40a245c985e",
-      "sourceName": "@openzeppelin/contracts/utils/math/SafeMath.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "SafeMath"
+        "MockERC20"
       ]
     },
     "/home/ubuntu/repos/XAIAgentTokenSmartContract/contracts/XAIAgentDRC20Upgradeable.sol": {
-      "lastModificationDate": 1735285113612,
-      "contentHash": "b62af7c938845fb3ca965911ade29f19",
+      "lastModificationDate": 1735286774675,
+      "contentHash": "4e3800c35d053cafe3831d3a029cecd9",
       "sourceName": "contracts/XAIAgentDRC20Upgradeable.sol",
       "solcConfig": {
         "version": "0.8.22",
@@ -428,7 +427,6 @@
         "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
         "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol",
-        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
         "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol"
       ],
       "versionPragmas": [
@@ -559,6 +557,43 @@
         "ERC20Upgradeable"
       ]
     },
+    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol": {
+      "lastModificationDate": 1735284863340,
+      "contentHash": "cf359c4fcf7f8a3224541d8416cf1dea",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "SafeMathUpgradeable"
+      ]
+    },
     "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
       "lastModificationDate": 1735284863240,
       "contentHash": "b0970a564d121abf9adfff8d1a01eb16",
@@ -637,43 +672,6 @@
       ],
       "artifacts": [
         "UUPSUpgradeable"
-      ]
-    },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol": {
-      "lastModificationDate": 1735284863340,
-      "contentHash": "cf359c4fcf7f8a3224541d8416cf1dea",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "SafeMathUpgradeable"
       ]
     },
     "/home/ubuntu/repos/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol": {
@@ -1445,45 +1443,6 @@
       ],
       "artifacts": [
         "IERC5267Upgradeable"
-      ]
-    },
-    "/home/ubuntu/repos/XAIAgentTokenSmartContract/contracts/mocks/MockERC20.sol": {
-      "lastModificationDate": 1735285768459,
-      "contentHash": "ce3590a96d6ed32b76cba227386214d4",
-      "sourceName": "contracts/mocks/MockERC20.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.22"
-      ],
-      "artifacts": [
-        "MockERC20"
       ]
     }
   }
