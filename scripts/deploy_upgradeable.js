@@ -7,35 +7,10 @@ async function main() {
   
   console.log("Deploying XAIAgentDRC20Upgradeable...");
   
-  // Get deployment parameters from environment
-  const initialTokenPrice = process.env.INITIAL_TOKEN_PRICE;
-  const dbcTokenAddress = process.env.DBC_TOKEN_ADDRESS;
-  const xaaPoolAddress = process.env.XAA_POOL_ADDRESS;
-  const ecosystemAddress = process.env.ECOSYSTEM_ADDRESS;
-  const creatorAddress = process.env.CREATOR_ADDRESS;
-
-  // Validate parameters
-  if (!initialTokenPrice || !dbcTokenAddress || !xaaPoolAddress || !ecosystemAddress || !creatorAddress) {
-    throw new Error("Missing required environment variables");
-  }
-
-  console.log("Deployment parameters:");
-  console.log(`- Initial Token Price: ${initialTokenPrice}`);
-  console.log(`- DBC Token Address: ${dbcTokenAddress}`);
-  console.log(`- XAA Pool Address: ${xaaPoolAddress}`);
-  console.log(`- Ecosystem Address: ${ecosystemAddress}`);
-  console.log(`- Creator Address: ${creatorAddress}`);
-
-  // Deploy proxy
+  // Deploy proxy without parameters since we've removed investment and distribution logic
   const xaaProxy = await hre.upgrades.deployProxy(
     XAIAgentDRC20,
-    [
-      initialTokenPrice,
-      dbcTokenAddress,
-      xaaPoolAddress,
-      ecosystemAddress,
-      creatorAddress
-    ],
+    [],
     {
       kind: "uups",
       initializer: "initialize"
@@ -55,13 +30,7 @@ async function main() {
     implementation: implementationAddress,
     network: hre.network.name,
     timestamp: new Date().toISOString(),
-    parameters: {
-      initialTokenPrice,
-      dbcTokenAddress,
-      xaaPoolAddress,
-      ecosystemAddress,
-      creatorAddress
-    }
+    parameters: {}
   };
 
   fs.writeFileSync(
