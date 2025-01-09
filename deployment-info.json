@@ -1,7 +1,6 @@
 {
-  "proxy": "0x0066f90AB60a74855cD09b6c1b657f95e3C5f875",
-  "implementation": "0x54882912697eeFA3321490C330653304449E43e9",
-  "network": "dbcTestnet",
-  "timestamp": "2024-12-27T10:20:25.630Z",
+  "implementation": "0x3c1C68574C0600a649898aC491c14F821A936C99",
+  "network": "dbcMainnet",
+  "timestamp": "2025-01-09T07:55:02.054Z",
   "parameters": {}
 }

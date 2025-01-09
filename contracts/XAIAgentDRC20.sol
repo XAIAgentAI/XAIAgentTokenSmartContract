@@ -30,7 +30,10 @@ contract XAIAgentDRC20 is ERC20, ERC20Burnable, ReentrancyGuard, Ownable {
     }
     
     mapping(address => LockInfo[]) private walletLockTimestamp;
-    
+
+    mapping(address => bool) public lockTransferAdmins;
+
+
     // Events
     event TokensLocked(address indexed wallet, uint256 amount, uint256 unlockTime);
     constructor() ERC20("XAA Token", "XAA") {

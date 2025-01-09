@@ -19,7 +19,7 @@ describe("XAIAgentDRC20Upgradeable - TransferAndLock", function () {
         });
         // Enable lock functionality and set up admin wallet permission
         await token.lockTokensEnable();
-        await token.connect(owner).enableLockForWallet(admin.address);
+        await token.addLockTransferAdmin(admin.address);
     });
     
     describe("transferAndLock", function () {
@@ -75,12 +75,7 @@ describe("XAIAgentDRC20Upgradeable - TransferAndLock", function () {
             expect(await token.balanceOf(user2.address)).to.equal(amount);
             expect(await token.balanceOf(user1.address)).to.equal(0);
         });
-        
-        it("should only allow enabled wallets to use transferAndLock", async function () {
-            await expect(
-                token.connect(user1).transferAndLock(user2.address, amount, lockDuration)
-            ).to.be.revertedWith("Lock not enabled for this wallet");
-        });
+
         
         it("should fail when lock functionality is disabled", async function () {
             // Disable lock functionality

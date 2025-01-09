@@ -17,11 +17,12 @@ async function main() {
     }
   );
 
-  await xaaProxy.deployed();
-  console.log("XAIAgentDRC20Upgradeable deployed to:", xaaProxy.address);
+  await xaaProxy.waitForDeployment();
+  proxyAddress = await xaaProxy.getAddress();
+  console.log("XAIAgentDRC20Upgradeable deployed to:", proxyAddress);
 
   // Get implementation address
-  const implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(xaaProxy.address);
+  const implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(proxyAddress);
   console.log("Implementation contract address:", implementationAddress);
 
   // Save deployment information

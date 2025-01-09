@@ -18,7 +18,7 @@ module.exports = {
     }
   },
   networks: {
-    dbc: {
+    dbcMainnet: {
       url: process.env.DBC_RPC_URL || "https://rpc.dbcwallet.io",
       chainId: 19880818,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
@@ -40,7 +40,9 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      dbcTestnet: "no-api-key-needed"
+      dbcTestnet: "no-api-key-needed",
+      dbcMainnet: 'no-api-key-needed',
+
     },
     customChains: [
       {
@@ -50,6 +52,14 @@ module.exports = {
           apiURL: "https://test.dbcscan.io/api",
           browserURL: "https://test.dbcscan.io"
         }
+      },
+      {
+        network: "dbcMainnet",
+        chainId: 19880818,
+        urls: {
+          apiURL: "https://www.dbcscan.io/api",
+          browserURL: "https://www.dbcscan.io",
+        },
       }
     ]
   }

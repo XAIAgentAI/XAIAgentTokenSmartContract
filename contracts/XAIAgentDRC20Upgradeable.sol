@@ -31,13 +31,15 @@ contract XAIAgentDRC20Upgradeable is
 {
     using SafeMathUpgradeable for uint256;
 
+    // addresses that can transfer locked tokens
+    mapping(address => bool) public lockTransferAdmins;
+
     // Upgrade control
     address public canUpgradeAddress;
     bool public disableUpgrade;
 
     // Lock management
     bool public isLockActive;
-    mapping(address => bool) public walletLockPermission;
     mapping(address => LockInfo[]) private walletLockTimestamp;
     
     // Token locking mechanism
@@ -51,10 +53,10 @@ contract XAIAgentDRC20Upgradeable is
     event TransferAndLock(address indexed from, address indexed to, uint256 value, uint256 blockNumber);
     event LockDisabled(uint256 timestamp, uint256 blockNumber);
     event LockEnabled(uint256 timestamp, uint256 blockNumber);
-    event LockPermissionEnabled(address indexed wallet);
-    event LockPermissionDisabled(address indexed wallet);
     event AuthorizedUpgradeSelf(address indexed upgradeAddress);
     event DisableContractUpgrade(uint256 timestamp);
+    event AddLockTransferAdmin(address indexed addr);
+    event RemoveLockTransferAdmin(address indexed addr);
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -69,6 +71,12 @@ contract XAIAgentDRC20Upgradeable is
         __UUPSUpgradeable_init();
         
         _mint(msg.sender, 100_000_000_000 * 10**decimals()); // 100 billion tokens
+        isLockActive = true;
+    }
+
+    modifier onlyLockTransferAdmin() {
+        require(lockTransferAdmins[msg.sender], "Not lock transfer admin");
+        _;
     }
 
     function _authorizeUpgrade(address newImplementation) internal override {
@@ -121,33 +129,12 @@ contract XAIAgentDRC20Upgradeable is
     }
 
     /**
-     * @dev Enable lock functionality for a specific wallet
-     * @param wallet Address to enable locking for
-     */
-    function enableLockForWallet(address wallet) external onlyOwner {
-        require(wallet != address(0), "Invalid wallet address");
-        walletLockPermission[wallet] = true;
-        emit LockPermissionEnabled(wallet);
-    }
-
-    /**
-     * @dev Disable lock functionality for a specific wallet
-     * @param wallet Address to disable locking for
-     */
-    function disableLockForWallet(address wallet) external onlyOwner {
-        require(wallet != address(0), "Invalid wallet address");
-        walletLockPermission[wallet] = false;
-        emit LockPermissionDisabled(wallet);
-    }
-
-    /**
      * @dev Transfer and lock tokens in one transaction
      * @param to Recipient address
      * @param value Amount to transfer and lock
      * @param lockSeconds Duration of the lock in seconds
      */
-    function transferAndLock(address to, uint256 value, uint256 lockSeconds) external {
-        require(walletLockPermission[msg.sender], "Lock not enabled for this wallet");
+    function transferAndLock(address to, uint256 value, uint256 lockSeconds) onlyLockTransferAdmin  external {
         require(to != address(0), "Invalid recipient");
         require(value > 0, "Invalid amount");
         require(lockSeconds > 0, "Invalid lock duration");
@@ -280,4 +267,25 @@ contract XAIAgentDRC20Upgradeable is
         return true;
     }
 
+    /**
+     * @dev add address to lock transfer admin list
+     * @param addr:  Address to add to lock transfer admin list
+     */
+    function addLockTransferAdmin(address addr) external onlyOwner{
+        require(addr != address(0), "Invalid address");
+        require(!lockTransferAdmins[addr], "Address already in lock transfer admin list");
+        lockTransferAdmins[addr] = true;
+        emit AddLockTransferAdmin(addr);
+    }
+
+    /**
+     * @dev remove address from lock transfer admin list
+     * @param addr:  Address to remove from lock transfer admin list
+     */
+    function removeLockTransferAdmin(address addr) external onlyOwner {
+        require(addr != address(0), "Invalid address");
+        require(lockTransferAdmins[addr], "Address not in lock transfer admin list");
+        lockTransferAdmins[addr] = false;
+        emit RemoveLockTransferAdmin(addr);
+    }
 }

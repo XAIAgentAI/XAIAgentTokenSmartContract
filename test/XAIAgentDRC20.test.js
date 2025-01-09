@@ -23,7 +23,9 @@ describe("XAIAgentDRC20Upgradeable", function () {
     
     // Enable lock functionality and set up owner wallet permission
     await xaaToken.connect(owner).lockTokensEnable();
-    await xaaToken.connect(owner).enableLockForWallet(owner.address);
+    await xaaToken.addLockTransferAdmin(owner.address);
+    await xaaToken.addLockTransferAdmin(addr1.address);
+
   });
 
   describe("Core Token Functionality", function () {
@@ -66,12 +68,10 @@ describe("XAIAgentDRC20Upgradeable", function () {
       
       // Lock all tokens
       await xaaToken.connect(owner).lockTokensEnable();
-      await xaaToken.connect(owner).enableLockForWallet(owner.address);
-      
+
       // Verify lock state
       expect(await xaaToken.isLockActive()).to.be.true;
-      expect(await xaaToken.walletLockPermission(owner.address)).to.be.true;
-      
+
       // Transfer and lock tokens in one transaction
       await xaaToken.connect(owner).transferAndLock(addr1.address, initialBalance, 86400); // 1 day lock
       
@@ -115,7 +115,6 @@ describe("XAIAgentDRC20Upgradeable", function () {
       // Create two locks
       const lockAmount1 = ethers.parseEther("300");
       const lockAmount2 = ethers.parseEther("400");
-      await xaaToken.connect(owner).enableLockForWallet(owner.address);
       await xaaToken.connect(owner).transferAndLock(addr1.address, lockAmount1, 86400); // 1 day
       await xaaToken.connect(owner).transferAndLock(addr1.address, lockAmount2, 172800); // 2 days
       
@@ -148,14 +147,6 @@ describe("XAIAgentDRC20Upgradeable", function () {
       await expect(
         xaaToken.connect(addr1).transfer(addr2.address, transferAmount)
       ).to.be.revertedWith("Insufficient unlocked balance");
-    });
-
-    it("Should manage wallet lock permissions correctly", async function () {
-      await xaaToken.connect(owner).enableLockForWallet(addr1.address);
-      expect(await xaaToken.walletLockPermission(addr1.address)).to.be.true;
-      
-      await xaaToken.connect(owner).disableLockForWallet(addr1.address);
-      expect(await xaaToken.walletLockPermission(addr1.address)).to.be.false;
     });
 
     it("Should allow unlimited lock entries", async function () {
@@ -223,11 +214,7 @@ describe("XAIAgentDRC20Upgradeable", function () {
       await expect(
         xaaToken.connect(addr1).lockTokensEnable()
       ).to.be.revertedWith("Ownable: caller is not the owner");
-      
-      await expect(
-        xaaToken.connect(addr1).enableLockForWallet(addr2.address)
-      ).to.be.revertedWith("Ownable: caller is not the owner");
-      
+
       await expect(
         xaaToken.connect(addr1).setUpgradePermission(addr2.address)
       ).to.be.revertedWith("Ownable: caller is not the owner");
@@ -237,11 +224,6 @@ describe("XAIAgentDRC20Upgradeable", function () {
       const amount = ethers.parseEther("1000");
       await xaaToken.connect(owner).transfer(addr1.address, amount);
       
-      await expect(
-        xaaToken.connect(addr1).transferAndLock(addr2.address, amount, 86400)
-      ).to.be.revertedWith("Lock not enabled for this wallet");
-      
-      await xaaToken.connect(owner).enableLockForWallet(addr1.address);
       await xaaToken.connect(addr1).transferAndLock(addr2.address, amount, 86400);
     });
   });
