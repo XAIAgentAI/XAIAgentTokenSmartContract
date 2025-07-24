@@ -2,7 +2,7 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/contracts/XAIAgentDRC20.sol": {
-      "lastModificationDate": 1736392411612,
+      "lastModificationDate": 1753343301450,
       "contentHash": "9d6d67025aabc21bc20d826004ce4050",
       "sourceName": "contracts/XAIAgentDRC20.sol",
       "solcConfig": {
@@ -44,45 +44,6 @@
         "XAIAgentDRC20"
       ]
     },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
-      "lastModificationDate": 1736316461446,
-      "contentHash": "5a20b2cad87ddb61c7a3a6af21289e28",
-      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../utils/Context.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Ownable"
-      ]
-    },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol": {
       "lastModificationDate": 1736316461469,
       "contentHash": "1535f8c0c68463f8c1b5239f7584e71f",
@@ -118,43 +79,6 @@
       ],
       "artifacts": [
         "ReentrancyGuard"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol": {
-      "lastModificationDate": 1736316461477,
-      "contentHash": "f6f4fda16c536e57069af40a245c985e",
-      "sourceName": "@openzeppelin/contracts/utils/math/SafeMath.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "SafeMath"
       ]
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol": {
@@ -196,6 +120,82 @@
       ],
       "artifacts": [
         "ERC20"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+      "lastModificationDate": 1736316461446,
+      "contentHash": "5a20b2cad87ddb61c7a3a6af21289e28",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol": {
+      "lastModificationDate": 1736316461477,
+      "contentHash": "f6f4fda16c536e57069af40a245c985e",
+      "sourceName": "@openzeppelin/contracts/utils/math/SafeMath.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "SafeMath"
       ]
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol": {
@@ -391,8 +391,8 @@
       ]
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/contracts/XAIAgentDRC20Upgradeable.sol": {
-      "lastModificationDate": 1736394435603,
-      "contentHash": "8fcd7e102d380c3f27c002a725da0b1d",
+      "lastModificationDate": 1753343960115,
+      "contentHash": "ae6b48b9e513cc4d38b0cae27a4915aa",
       "sourceName": "contracts/XAIAgentDRC20Upgradeable.sol",
       "solcConfig": {
         "version": "0.8.22",
@@ -436,6 +436,46 @@
         "XAIAgentDRC20Upgradeable"
       ]
     },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol": {
+      "lastModificationDate": 1736316461413,
+      "contentHash": "a70d53f7e468306c02c529ecaa1d59c5",
+      "sourceName": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/ContextUpgradeable.sol",
+        "../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "OwnableUpgradeable"
+      ]
+    },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol": {
       "lastModificationDate": 1736316461434,
       "contentHash": "2c309ab8cb953d5db2a280f534c113cd",
@@ -475,10 +515,10 @@
         "ReentrancyGuardUpgradeable"
       ]
     },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol": {
-      "lastModificationDate": 1736316461413,
-      "contentHash": "a70d53f7e468306c02c529ecaa1d59c5",
-      "sourceName": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol",
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+      "lastModificationDate": 1736316461434,
+      "contentHash": "b0970a564d121abf9adfff8d1a01eb16",
+      "sourceName": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
@@ -505,14 +545,13 @@
         }
       },
       "imports": [
-        "../utils/ContextUpgradeable.sol",
-        "../proxy/utils/Initializable.sol"
+        "../../utils/AddressUpgradeable.sol"
       ],
       "versionPragmas": [
-        "^0.8.0"
+        "^0.8.2"
       ],
       "artifacts": [
-        "OwnableUpgradeable"
+        "Initializable"
       ]
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol": {
@@ -557,10 +596,10 @@
         "ERC20Upgradeable"
       ]
     },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
-      "lastModificationDate": 1736316461434,
-      "contentHash": "b0970a564d121abf9adfff8d1a01eb16",
-      "sourceName": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol": {
+      "lastModificationDate": 1736316461437,
+      "contentHash": "b08e9ea784596ed4ca849aa00c331049",
+      "sourceName": "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
@@ -587,14 +626,12 @@
         }
       },
       "imports": [
-        "../../utils/AddressUpgradeable.sol"
+        "./ERC20PermitUpgradeable.sol"
       ],
       "versionPragmas": [
-        "^0.8.2"
+        "^0.8.0"
       ],
-      "artifacts": [
-        "Initializable"
-      ]
+      "artifacts": []
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol": {
       "lastModificationDate": 1736316461434,
@@ -635,43 +672,6 @@
       ],
       "artifacts": [
         "UUPSUpgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol": {
-      "lastModificationDate": 1736316461443,
-      "contentHash": "cf359c4fcf7f8a3224541d8416cf1dea",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "SafeMathUpgradeable"
       ]
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol": {
@@ -715,47 +715,10 @@
         "ERC20BurnableUpgradeable"
       ]
     },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol": {
-      "lastModificationDate": 1736316461437,
-      "contentHash": "b08e9ea784596ed4ca849aa00c331049",
-      "sourceName": "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./ERC20PermitUpgradeable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": []
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol": {
-      "lastModificationDate": 1736316461440,
-      "contentHash": "c30c805386fda8a42ff515da963d3a95",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol",
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol": {
+      "lastModificationDate": 1736316461443,
+      "contentHash": "cf359c4fcf7f8a3224541d8416cf1dea",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
@@ -783,10 +746,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.1"
+        "^0.8.0"
       ],
       "artifacts": [
-        "AddressUpgradeable"
+        "SafeMathUpgradeable"
       ]
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
@@ -826,6 +789,43 @@
       ],
       "artifacts": [
         "ContextUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol": {
+      "lastModificationDate": 1736316461440,
+      "contentHash": "c30c805386fda8a42ff515da963d3a95",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.1"
+      ],
+      "artifacts": [
+        "AddressUpgradeable"
       ]
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol": {
@@ -902,6 +902,355 @@
       ],
       "artifacts": [
         "IERC20MetadataUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol": {
+      "lastModificationDate": 1736316461436,
+      "contentHash": "b9222747a1f03e94fbadd77df01db744",
+      "sourceName": "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC20PermitUpgradeable.sol",
+        "../ERC20Upgradeable.sol",
+        "../../../utils/cryptography/ECDSAUpgradeable.sol",
+        "../../../utils/cryptography/EIP712Upgradeable.sol",
+        "../../../utils/CountersUpgradeable.sol",
+        "../../../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC20PermitUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol": {
+      "lastModificationDate": 1736316461440,
+      "contentHash": "2e908c762a799baea365e68a50500e2c",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "CountersUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol": {
+      "lastModificationDate": 1736316461441,
+      "contentHash": "e6a08d062a6f4f6b05822a0fa19a1606",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../StringsUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ECDSAUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol": {
+      "lastModificationDate": 1736316461441,
+      "contentHash": "98e821b98b4ce0a1aa9da677aa2914b4",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ECDSAUpgradeable.sol",
+        "../../interfaces/IERC5267Upgradeable.sol",
+        "../../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.8"
+      ],
+      "artifacts": [
+        "EIP712Upgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol": {
+      "lastModificationDate": 1736316461437,
+      "contentHash": "d95d71f4a9c75f46e6ab7fc92b6f9bac",
+      "sourceName": "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20PermitUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol": {
+      "lastModificationDate": 1736316461441,
+      "contentHash": "c221361be1c4953f5b71f47475b90266",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./math/MathUpgradeable.sol",
+        "./math/SignedMathUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "StringsUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/math/SignedMathUpgradeable.sol": {
+      "lastModificationDate": 1736316461443,
+      "contentHash": "2a6b819b2e241091ada6d645df3e3929",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/SignedMathUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "SignedMathUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol": {
+      "lastModificationDate": 1736316461443,
+      "contentHash": "5a2a749b45b6a8eb035f4bf75addcb27",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "MathUpgradeable"
+      ]
+    },
+    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/interfaces/IERC5267Upgradeable.sol": {
+      "lastModificationDate": 1736316461432,
+      "contentHash": "2b3f03127c03dd67be61c925b1f86ff3",
+      "sourceName": "@openzeppelin/contracts-upgradeable/interfaces/IERC5267Upgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC5267Upgradeable"
       ]
     },
     "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/interfaces/draft-IERC1822Upgradeable.sol": {
@@ -1094,355 +1443,6 @@
       ],
       "artifacts": [
         "IERC1967Upgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol": {
-      "lastModificationDate": 1736316461436,
-      "contentHash": "b9222747a1f03e94fbadd77df01db744",
-      "sourceName": "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./IERC20PermitUpgradeable.sol",
-        "../ERC20Upgradeable.sol",
-        "../../../utils/cryptography/ECDSAUpgradeable.sol",
-        "../../../utils/cryptography/EIP712Upgradeable.sol",
-        "../../../utils/CountersUpgradeable.sol",
-        "../../../proxy/utils/Initializable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ERC20PermitUpgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol": {
-      "lastModificationDate": 1736316461441,
-      "contentHash": "98e821b98b4ce0a1aa9da677aa2914b4",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./ECDSAUpgradeable.sol",
-        "../../interfaces/IERC5267Upgradeable.sol",
-        "../../proxy/utils/Initializable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.8"
-      ],
-      "artifacts": [
-        "EIP712Upgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol": {
-      "lastModificationDate": 1736316461437,
-      "contentHash": "d95d71f4a9c75f46e6ab7fc92b6f9bac",
-      "sourceName": "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC20PermitUpgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol": {
-      "lastModificationDate": 1736316461440,
-      "contentHash": "2e908c762a799baea365e68a50500e2c",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "CountersUpgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol": {
-      "lastModificationDate": 1736316461441,
-      "contentHash": "e6a08d062a6f4f6b05822a0fa19a1606",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../StringsUpgradeable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ECDSAUpgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/interfaces/IERC5267Upgradeable.sol": {
-      "lastModificationDate": 1736316461432,
-      "contentHash": "2b3f03127c03dd67be61c925b1f86ff3",
-      "sourceName": "@openzeppelin/contracts-upgradeable/interfaces/IERC5267Upgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC5267Upgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol": {
-      "lastModificationDate": 1736316461441,
-      "contentHash": "c221361be1c4953f5b71f47475b90266",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./math/MathUpgradeable.sol",
-        "./math/SignedMathUpgradeable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "StringsUpgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol": {
-      "lastModificationDate": 1736316461443,
-      "contentHash": "5a2a749b45b6a8eb035f4bf75addcb27",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "MathUpgradeable"
-      ]
-    },
-    "/Users/yintao/devlop/substrate/contracts/XAIAgentTokenSmartContract/node_modules/@openzeppelin/contracts-upgradeable/utils/math/SignedMathUpgradeable.sol": {
-      "lastModificationDate": 1736316461443,
-      "contentHash": "2a6b819b2e241091ada6d645df3e3929",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/SignedMathUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "SignedMathUpgradeable"
       ]
     }
   }

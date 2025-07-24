@@ -146,6 +146,11 @@ contract XAIAgentDRC20Upgradeable is
         lockTokens(to, value, lockSeconds);
     }
 
+    function getLockInfos(address caller) public view returns (LockInfo[] memory) {
+        LockInfo[] memory lockInfos = walletLockTimestamp[caller];
+        return lockInfos;
+    }
+
     /**
      * @dev Internal function to lock tokens after transfer
      * @param wallet Address of the wallet to lock tokens for
@@ -185,6 +190,19 @@ contract XAIAgentDRC20Upgradeable is
         }
 
         return lockedAmount;
+    }
+
+      /**
+     * @dev Get available amount for an address
+     * @param caller Address to check
+     * @return total Total balance
+     * @return available Available (unlocked) balance
+     */
+    function getAvailableAmount(address caller) public view returns (uint256, uint256) {
+        uint256 lockedAmount = calculateLockedAmount(caller);
+        uint256 total = balanceOf(caller);
+        uint256 availableAmount = total - lockedAmount;
+        return (total, availableAmount);
     }
 
     /**
